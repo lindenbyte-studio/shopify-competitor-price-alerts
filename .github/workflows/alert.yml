@@ -1,0 +1,49 @@
+name: alert
+
+on:
+  schedule:
+    - cron: "41 6 * * *"   # 06:41 UTC every day. Edit to change when the alert runs (cron syntax, UTC).
+  workflow_dispatch:        # "Run workflow" button in the Actions tab
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alert
+  cancel-in-progress: false
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the Actor and send the alert
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+        run: python alert.py --config config.yml --out out
+
+      - name: Upload digest (digest.md, items.csv, items.json)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: digest-${{ github.run_id }}
+          path: out/
+          if-no-files-found: ignore
+          retention-days: 30

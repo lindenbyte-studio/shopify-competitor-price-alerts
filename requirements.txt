@@ -1,0 +1,2 @@
+apify-client>=3.5,<4
+pyyaml>=6.0,<7

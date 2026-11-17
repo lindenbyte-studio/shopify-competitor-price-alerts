@@ -1,0 +1,31 @@
+# Shopify competitor price alerts: the only file you need to edit.
+# Everything under `input:` is passed to the Apify Actor "Shopify Catalog & Change Monitor" as-is
+# (this repo always runs it in "changes" mode). All fields:
+# https://apify.com/lindenbyte/shopify-catalog-change-monitor/input-schema
+
+input:
+  # Shopify store domains, or a collection URL such as https://example.com/collections/sale
+  stores:
+    - allbirds.com
+    - colourpop.com
+  # Monitor name. The last snapshot of each store is kept under this name in YOUR Apify account
+  # (key-value store "shopify-catalog-monitor-state"). Keep it stable; change it to start a fresh baseline.
+  stateKey: github-price-alerts
+  # Which changes to alert on: new, price_drop, price_increase, restocked, sold_out, removed
+  changeTypes:
+    - price_drop
+    - restocked
+    - new
+  minPriceChangePercent: 5     # ignore price moves smaller than this
+  maxProductsPerStore: 5000    # reading is free; keep it ABOVE the store's catalog size, or products past the cap are not tracked
+  # Optional filters (filtered-out products are free):
+  # keywords: [runner, wool]
+  # vendors: [Allbirds]
+  # collection: sale
+  # inStockOnly: true
+
+alert:
+  title: Shopify competitor changes
+  max_items_in_message: 30
+  max_charge_usd: 0.25         # hard cap per run, enforced by Apify
+  send_when_empty: false
