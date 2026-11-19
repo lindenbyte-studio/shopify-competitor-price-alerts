@@ -108,7 +108,7 @@ pip install pytest && pytest -q   # offline tests (Slack payload builder, render
 ## Links
 
 - Actor: [apify.com/lindenbyte/shopify-catalog-change-monitor](https://apify.com/lindenbyte/shopify-catalog-change-monitor)
-- Tutorials: [dev.to/lindenbyte](https://dev.to/lindenbyte)
+- Step-by-step tutorial: [Get alerts when a Shopify store drops a price, restocks or adds a product](https://dev.to/lindenbyte/get-alerts-when-a-shopify-store-drops-a-price-restocks-or-adds-a-product-2f3c) (more at [dev.to/lindenbyte](https://dev.to/lindenbyte))
 - More tools and tutorials: [lindenbyte-studio.github.io](https://lindenbyte-studio.github.io)
 - Sister templates: [competitor-new-pages-alerts](https://github.com/lindenbyte-studio/competitor-new-pages-alerts),
   [sam-gov-rfp-alerts](https://github.com/lindenbyte-studio/sam-gov-rfp-alerts)
